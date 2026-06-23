@@ -1,13 +1,21 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)https://nirvanaxyz.github.io/life-time-calculator/ -->
-<html lang="en" data-qb-installed="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Life Time Calculator</title>
-<meta name="description" content="See how you spend your life hours and how much time goes to low-value activities.">
-<meta name="theme-color" content="#ffffff">
-<link rel="manifest" href="data:application/json,{%0A  %22name%22:%22Life Time Calculator%22,%0A  %22short_name%22:%22LifeTime%22,%0A  %22start_url%22:%22.%22,%0A  %22display%22:%22standalone%22,%0A  %22background_color%22:%22%23ffffff%22,%0A  %22theme_color%22:%22%23534AB7%22,%0A  %22icons%22:[{%22src%22:%22https://placehold.co/192x192/534AB7/ffffff?text=LT%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]%0A}">
-<script src="./Life Time Calculator_files/chart.umd.js.download"></script>
+<meta name="description" content="See how you spend your life hours and how much time goes to low-value activities." />
+<meta name="theme-color" content="#ffffff" />
+<link rel="manifest" href="data:application/json,{
+  %22name%22:%22Life Time Calculator%22,
+  %22short_name%22:%22LifeTime%22,
+  %22start_url%22:%22.%22,
+  %22display%22:%22standalone%22,
+  %22background_color%22:%22%23ffffff%22,
+  %22theme_color%22:%22%23534AB7%22,
+  %22icons%22:[{%22src%22:%22https://placehold.co/192x192/534AB7/ffffff?text=LT%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]
+}" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -89,123 +97,26 @@
 <div class="grid2">
   <div class="card">
     <label class="field-label" for="age">Your age</label>
-    <input type="number" id="age" min="1" max="100" value="30">
+    <input type="number" id="age" min="1" max="100" value="30" />
   </div>
   <div class="card">
     <label class="field-label" for="lifespan">Expected lifespan</label>
-    <input type="number" id="lifespan" min="1" max="120" value="80">
+    <input type="number" id="lifespan" min="1" max="120" value="80" />
   </div>
 </div>
 
-<div class="grid4" id="summary-cards">
-    <div class="metric">
-      <div class="metric-label">Years remaining</div>
-      <div class="metric-val">50</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Low-value hrs/day</div>
-      <div class="metric-val" style="color: var(--red);">7.0h</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Years on low-value</div>
-      <div class="metric-val" style="color: var(--red);">14.6</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">% of waking time</div>
-      <div class="metric-val" style="color: var(--green);">29%</div>
-    </div>
-  </div>
+<div class="grid4" id="summary-cards"></div>
 
 <div class="card" style="margin-bottom: 1.5rem;">
   <p class="section-title">Daily time allocation (hours)</p>
-  <div id="sliders"><div class="slider-row">
-    <span class="slider-name">Sleep</span>
-    <input type="range" id="sl-sleep" min="0" max="16" step="0.5" value="7">
-    <span class="slider-val" id="val-sleep">7h</span>
-    
-  </div><div class="slider-row">
-    <span class="slider-name">Work / study</span>
-    <input type="range" id="sl-work" min="0" max="16" step="0.5" value="8">
-    <span class="slider-val" id="val-work">8h</span>
-    
-  </div><div class="slider-row">
-    <span class="slider-name">Social media</span>
-    <input type="range" id="sl-social" min="0" max="16" step="0.5" value="2">
-    <span class="slider-val" id="val-social">2h</span>
-    <span class="badge">low-value</span>
-  </div><div class="slider-row">
-    <span class="slider-name">TV / streaming</span>
-    <input type="range" id="sl-tv" min="0" max="16" step="0.5" value="2">
-    <span class="slider-val" id="val-tv">2h</span>
-    <span class="badge">low-value</span>
-  </div><div class="slider-row">
-    <span class="slider-name">Commuting</span>
-    <input type="range" id="sl-commute" min="0" max="16" step="0.5" value="1">
-    <span class="slider-val" id="val-commute">1h</span>
-    <span class="badge">low-value</span>
-  </div><div class="slider-row">
-    <span class="slider-name">Eating &amp; cooking</span>
-    <input type="range" id="sl-meals" min="0" max="16" step="0.5" value="1.5">
-    <span class="slider-val" id="val-meals">1.5h</span>
-    
-  </div><div class="slider-row">
-    <span class="slider-name">Exercise</span>
-    <input type="range" id="sl-exercise" min="0" max="16" step="0.5" value="0.5">
-    <span class="slider-val" id="val-exercise">0.5h</span>
-    
-  </div><div class="slider-row">
-    <span class="slider-name">Other (idle/misc)</span>
-    <input type="range" id="sl-other" min="0" max="16" step="0.5" value="2">
-    <span class="slider-val" id="val-other">2h</span>
-    <span class="badge">low-value</span>
-  </div><div class="slider-row">
-    <span class="slider-name">Sleep</span>
-    <input type="range" id="sl-sleep" min="0" max="16" step="0.5" value="7">
-    <span class="slider-val" id="val-sleep">7h</span>
-    
-  </div><div class="slider-row">
-    <span class="slider-name">Work / study</span>
-    <input type="range" id="sl-work" min="0" max="16" step="0.5" value="8">
-    <span class="slider-val" id="val-work">8h</span>
-    
-  </div><div class="slider-row">
-    <span class="slider-name">Social media</span>
-    <input type="range" id="sl-social" min="0" max="16" step="0.5" value="2">
-    <span class="slider-val" id="val-social">2h</span>
-    <span class="badge">low-value</span>
-  </div><div class="slider-row">
-    <span class="slider-name">TV / streaming</span>
-    <input type="range" id="sl-tv" min="0" max="16" step="0.5" value="2">
-    <span class="slider-val" id="val-tv">2h</span>
-    <span class="badge">low-value</span>
-  </div><div class="slider-row">
-    <span class="slider-name">Commuting</span>
-    <input type="range" id="sl-commute" min="0" max="16" step="0.5" value="1">
-    <span class="slider-val" id="val-commute">1h</span>
-    <span class="badge">low-value</span>
-  </div><div class="slider-row">
-    <span class="slider-name">Eating &amp; cooking</span>
-    <input type="range" id="sl-meals" min="0" max="16" step="0.5" value="1.5">
-    <span class="slider-val" id="val-meals">1.5h</span>
-    
-  </div><div class="slider-row">
-    <span class="slider-name">Exercise</span>
-    <input type="range" id="sl-exercise" min="0" max="16" step="0.5" value="0.5">
-    <span class="slider-val" id="val-exercise">0.5h</span>
-    
-  </div><div class="slider-row">
-    <span class="slider-name">Other (idle/misc)</span>
-    <input type="range" id="sl-other" min="0" max="16" step="0.5" value="2">
-    <span class="slider-val" id="val-other">2h</span>
-    <span class="badge">low-value</span>
-  </div></div>
+  <div id="sliders"></div>
 </div>
 
 <div class="card" style="margin-bottom: 1.5rem;">
   <div class="chart-wrap">
-    <canvas id="chart" role="img" aria-label="Bar chart showing years spent on each life activity" width="1809" height="300" style="display: block; box-sizing: border-box; height: 240px; width: 1447px;"></canvas>
+    <canvas id="chart" role="img" aria-label="Bar chart showing years spent on each life activity"></canvas>
   </div>
-  <p class="insight" id="insight">Based on your inputs, you'll spend roughly <strong>14.6 years</strong> on low-value activities. Your biggest time sink is <strong>Social media</strong> at <strong>2h/day</strong>. Cutting just 30 minutes from it daily would reclaim <strong>1.0 years</strong>.</p>
+  <p class="insight" id="insight"></p>
 </div>
 
 <div style="height: 60px;"></div>
@@ -333,7 +244,5 @@ document.getElementById('dismiss-btn').addEventListener('click', () => {
   document.getElementById('install-bar').style.display = 'none';
 });
 </script>
-
-
-
-</body></html>
+</body>
+</html>
