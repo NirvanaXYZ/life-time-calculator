@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)file:///C:/Users/vishe/Downloads/life-time-calculator_1.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Time Calculator</title>
+<meta name="description" content="See how you spend your life hours and how much time goes to low-value activities.">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="data:application/json,{%0A  %22name%22:%22Life Time Calculator%22,%0A  %22short_name%22:%22LifeTime%22,%0A  %22start_url%22:%22.%22,%0A  %22display%22:%22standalone%22,%0A  %22background_color%22:%22%23ffffff%22,%0A  %22theme_color%22:%22%23534AB7%22,%0A  %22icons%22:[{%22src%22:%22https://placehold.co/192x192/534AB7/ffffff?text=LT%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]%0A}">
+<script src="./Life Time Calculator_files/chart.umd.js.download"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f1efe8;
+    --text: #1a1a18;
+    --text2: #5f5e5a;
+    --border: rgba(0,0,0,0.12);
+    --accent: #534AB7;
+    --red: #E24B4A;
+    --green: #639922;
+    --amber: #EF9F27;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18;
+      --surface: #2c2c2a;
+      --surface2: #232321;
+      --text: #f1efe8;
+      --text2: #b4b2a9;
+      --border: rgba(255,255,255,0.12);
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 1.5rem 1rem 4rem;
+  }
+  h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .sub { font-size: 14px; color: var(--text2); margin-bottom: 2rem; }
+  .card { background: var(--surface); border-radius: var(--radius); border: 0.5px solid var(--border); padding: 1rem 1.25rem; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  .metric { background: var(--surface2); border-radius: 8px; padding: 0.85rem 1rem; }
+  .metric-label { font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+  .metric-val { font-size: 22px; font-weight: 500; }
+  label.field-label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 6px; }
+  input[type=number] {
+    width: 100%; font-size: 20px; font-weight: 500;
+    background: transparent; border: none; color: var(--text);
+    outline: none;
+  }
+  .section-title { font-size: 14px; font-weight: 500; color: var(--text2); margin-bottom: 1rem; }
+  .slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .slider-name { width: 130px; font-size: 13px; color: var(--text2); flex-shrink: 0; }
+  input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slider-val { font-size: 13px; font-weight: 500; min-width: 34px; color: var(--text); }
+  .badge { font-size: 11px; background: #FCEBEB; color: #A32D2D; border-radius: 4px; padding: 2px 6px; flex-shrink: 0; }
+  .chart-wrap { position: relative; width: 100%; height: 240px; margin-bottom: 1.5rem; }
+  .insight { font-size: 14px; color: var(--text2); line-height: 1.7; }
+  .insight strong { color: var(--text); }
+  .install-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--surface); border-top: 0.5px solid var(--border);
+    padding: 12px 1rem; display: flex; align-items: center; gap: 12px;
+    font-size: 14px; color: var(--text2);
+  }
+  .install-bar button {
+    background: var(--accent); color: #fff; border: none;
+    border-radius: 8px; padding: 8px 18px; font-size: 14px; cursor: pointer;
+    flex-shrink: 0;
+  }
+  .install-bar .dismiss { background: none; border: 0.5px solid var(--border); color: var(--text2); margin-left: auto; }
+  @media (max-width: 480px) {
+    .slider-name { width: 100px; font-size: 12px; }
+    h1 { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Life time calculator</h1>
+<p class="sub">See where your years are really going.</p>
+
+<div class="grid2">
+  <div class="card">
+    <label class="field-label" for="age">Your age</label>
+    <input type="number" id="age" min="1" max="100" value="30">
+  </div>
+  <div class="card">
+    <label class="field-label" for="lifespan">Expected lifespan</label>
+    <input type="number" id="lifespan" min="1" max="120" value="80">
+  </div>
+</div>
+
+<div class="grid4" id="summary-cards">
+    <div class="metric">
+      <div class="metric-label">Years remaining</div>
+      <div class="metric-val">50</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Low-value hrs/day</div>
+      <div class="metric-val" style="color: var(--red);">7.0h</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Years on low-value</div>
+      <div class="metric-val" style="color: var(--red);">14.6</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">% of waking time</div>
+      <div class="metric-val" style="color: var(--green);">34%</div>
+    </div>
+  </div>
+
+<div class="card" style="margin-bottom: 1.5rem;">
+  <p class="section-title">Daily time allocation (hours)</p>
+  <div id="sliders"><div class="slider-row">
+    <span class="slider-name">Sleep</span>
+    <input type="range" id="sl-sleep" min="0" max="16" step="0.5" value="7">
+    <span class="slider-val" id="val-sleep">7h</span>
+    
+  </div><div class="slider-row">
+    <span class="slider-name">Work / study</span>
+    <input type="range" id="sl-work" min="0" max="16" step="0.5" value="8">
+    <span class="slider-val" id="val-work">4.5h</span>
+    
+  </div><div class="slider-row">
+    <span class="slider-name">Social media</span>
+    <input type="range" id="sl-social" min="0" max="16" step="0.5" value="2">
+    <span class="slider-val" id="val-social">2h</span>
+    <span class="badge">low-value</span>
+  </div><div class="slider-row">
+    <span class="slider-name">TV / streaming</span>
+    <input type="range" id="sl-tv" min="0" max="16" step="0.5" value="2">
+    <span class="slider-val" id="val-tv">2h</span>
+    <span class="badge">low-value</span>
+  </div><div class="slider-row">
+    <span class="slider-name">Commuting</span>
+    <input type="range" id="sl-commute" min="0" max="16" step="0.5" value="1">
+    <span class="slider-val" id="val-commute">1h</span>
+    <span class="badge">low-value</span>
+  </div><div class="slider-row">
+    <span class="slider-name">Eating &amp; cooking</span>
+    <input type="range" id="sl-meals" min="0" max="16" step="0.5" value="1.5">
+    <span class="slider-val" id="val-meals">1.5h</span>
+    
+  </div><div class="slider-row">
+    <span class="slider-name">Exercise</span>
+    <input type="range" id="sl-exercise" min="0" max="16" step="0.5" value="0.5">
+    <span class="slider-val" id="val-exercise">0.5h</span>
+    
+  </div><div class="slider-row">
+    <span class="slider-name">Other (idle/misc)</span>
+    <input type="range" id="sl-other" min="0" max="16" step="0.5" value="2">
+    <span class="slider-val" id="val-other">2h</span>
+    <span class="badge">low-value</span>
+  </div></div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem;">
+  <div class="chart-wrap">
+    <canvas id="chart" role="img" aria-label="Bar chart showing years spent on each life activity" width="1809" height="300" style="display: block; box-sizing: border-box; height: 240px; width: 1447px;"></canvas>
+  </div>
+  <p class="insight" id="insight">Based on your inputs, you'll spend roughly <strong>14.6 years</strong> on low-value activities. Your biggest time sink is <strong>Social media</strong> at <strong>2h/day</strong>. Cutting just 30 minutes from it daily would reclaim <strong>1.0 years</strong>.</p>
+</div>
+
+<div style="height: 60px;"></div>
+
+<div class="install-bar" id="install-bar" style="display:none;">
+  <span>Install as app on your device</span>
+  <button id="install-btn">Install</button>
+  <button class="dismiss" id="dismiss-btn">Not now</button>
+</div>
+
+<script>
+const activities = [
+  { id: 'sleep',    label: 'Sleep',             default: 7,   color: '#5DCAA5', waste: false },
+  { id: 'work',     label: 'Work / study',       default: 8,   color: '#7F77DD', waste: false },
+  { id: 'social',   label: 'Social media',       default: 2,   color: '#E24B4A', waste: true  },
+  { id: 'tv',       label: 'TV / streaming',     default: 2,   color: '#EF9F27', waste: true  },
+  { id: 'commute',  label: 'Commuting',          default: 1,   color: '#D85A30', waste: true  },
+  { id: 'meals',    label: 'Eating & cooking',   default: 1.5, color: '#378ADD', waste: false },
+  { id: 'exercise', label: 'Exercise',           default: 0.5, color: '#639922', waste: false },
+  { id: 'other',    label: 'Other (idle/misc)',  default: 2,   color: '#888780', waste: true  },
+];
+
+const sliderContainer = document.getElementById('sliders');
+activities.forEach(a => {
+  const row = document.createElement('div');
+  row.className = 'slider-row';
+  row.innerHTML = `
+    <span class="slider-name">${a.label}</span>
+    <input type="range" id="sl-${a.id}" min="0" max="16" step="0.5" value="${a.default}" />
+    <span class="slider-val" id="val-${a.id}">${a.default}h</span>
+    ${a.waste ? '<span class="badge">low-value</span>' : ''}
+  `;
+  sliderContainer.appendChild(row);
+  document.getElementById('sl-' + a.id).addEventListener('input', update);
+});
+
+let chart;
+
+function update() {
+  const age = parseInt(document.getElementById('age').value) || 30;
+  const lifespan = parseInt(document.getElementById('lifespan').value) || 80;
+  const remaining = Math.max(0, lifespan - age);
+  const vals = activities.map(a => ({
+    ...a,
+    hours: parseFloat(document.getElementById('sl-' + a.id).value)
+  }));
+
+  vals.forEach(a => {
+    document.getElementById('val-' + a.id).textContent = a.hours + 'h';
+  });
+
+  const totalDaily = vals.reduce((s, a) => s + a.hours, 0);
+  const wasteDaily = vals.filter(a => a.waste).reduce((s, a) => s + a.hours, 0);
+  const wasteYears = (wasteDaily / 24 * 365 * remaining / 365).toFixed(1);
+  const wastePercent = totalDaily > 0 ? Math.round(wasteDaily / totalDaily * 100) : 0;
+
+  document.getElementById('summary-cards').innerHTML = `
+    <div class="metric">
+      <div class="metric-label">Years remaining</div>
+      <div class="metric-val">${remaining}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Low-value hrs/day</div>
+      <div class="metric-val" style="color: var(--red);">${wasteDaily.toFixed(1)}h</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Years on low-value</div>
+      <div class="metric-val" style="color: var(--red);">${wasteYears}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">% of waking time</div>
+      <div class="metric-val" style="color: ${wastePercent > 40 ? 'var(--red)' : 'var(--green)'};">${wastePercent}%</div>
+    </div>
+  `;
+
+  const yearsData = vals.map(a => +(a.hours / 24 * 365 * remaining / 365).toFixed(1));
+
+  if (!chart) {
+    chart = new Chart(document.getElementById('chart'), {
+      type: 'bar',
+      data: {
+        labels: vals.map(a => a.label),
+        datasets: [{ label: 'Years spent', data: yearsData, backgroundColor: vals.map(a => a.color), borderRadius: 4 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { font: { size: 11 }, autoSkip: false, maxRotation: 35 } },
+          y: { title: { display: true, text: 'years', font: { size: 11 } }, ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+  } else {
+    chart.data.datasets[0].data = yearsData;
+    chart.update('none');
+  }
+
+  const topWaste = vals.filter(a => a.waste).sort((x, y) => y.hours - x.hours)[0];
+  const saved = (0.5 / 24 * 365 * remaining / 365).toFixed(1);
+  document.getElementById('insight').innerHTML =
+    `Based on your inputs, you'll spend roughly <strong>${wasteYears} years</strong> on low-value activities. Your biggest time sink is <strong>${topWaste?.label}</strong> at <strong>${topWaste?.hours}h/day</strong>. Cutting just 30 minutes from it daily would reclaim <strong>${saved} years</strong>.`;
+}
+
+update();
+document.getElementById('age').addEventListener('input', update);
+document.getElementById('lifespan').addEventListener('input', update);
+
+// PWA install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-bar').style.display = 'flex';
+});
+document.getElementById('install-btn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('install-bar').style.display = 'none';
+  }
+});
+document.getElementById('dismiss-btn').addEventListener('click', () => {
+  document.getElementById('install-bar').style.display = 'none';
+});
+</script>
+
+
+</body></html>
