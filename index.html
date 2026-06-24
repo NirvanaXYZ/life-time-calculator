@@ -159,8 +159,11 @@ function update() {
   const ageVal = document.getElementById('age').value;
   const lifespanVal = document.getElementById('lifespan').value;
   const age = ageVal === '' ? 0 : parseInt(ageVal);
-  const lifespan = lifespanVal === '' ? age : parseInt(lifespanVal);
-  const remaining = Math.max(0, lifespan - age);
+  const lifespanEmpty = lifespanVal === '';
+  const lifespan = lifespanEmpty ? age : parseInt(lifespanVal);
+  // If lifespan empty, calculate waste over years already lived (age years)
+  const yearsToCalculate = lifespanEmpty ? age : Math.max(0, lifespan - age);
+  const remaining = yearsToCalculate;
   const vals = activities.map(a => ({
     ...a,
     hours: parseFloat(document.getElementById('sl-' + a.id).value)
@@ -177,7 +180,7 @@ function update() {
 
   document.getElementById('summary-cards').innerHTML = `
     <div class="metric">
-      <div class="metric-label">Years remaining</div>
+      <div class="metric-label">${lifespanEmpty ? 'Years lived' : 'Years remaining'}</div>
       <div class="metric-val">${remaining}</div>
     </div>
     <div class="metric">
@@ -185,7 +188,7 @@ function update() {
       <div class="metric-val" style="color: var(--red);">${wasteDaily.toFixed(1)}h</div>
     </div>
     <div class="metric">
-      <div class="metric-label">Years on low-value</div>
+      <div class="metric-label">${lifespanEmpty ? 'Years wasted so far' : 'Years on low-value'}</div>
       <div class="metric-val" style="color: var(--red);">${wasteYears}</div>
     </div>
     <div class="metric">
@@ -221,9 +224,11 @@ function update() {
   const saved = (0.5 / 24 * 365 * remaining / 365).toFixed(1);
   const insightEl = document.getElementById('insight');
   if (remaining === 0) {
-    insightEl.innerHTML = `Enter your expected lifespan to see how many years you have left — and how many will go to low-value activities.`;
+    insightEl.innerHTML = `Enter your age to get started.`;
+  } else if (lifespanEmpty) {
+    insightEl.innerHTML = `In your <strong>${age} years</strong> of life so far, you've spent roughly <strong style="color:var(--red)">${wasteYears} years</strong> on low-value activities. Your biggest time sink is <strong>${topWaste?.label}</strong> at <strong>${topWaste?.hours}h/day</strong>. Add your expected lifespan to see what's still ahead.`;
   } else {
-    insightEl.innerHTML = `Based on your inputs, you'll spend roughly <strong>${wasteYears} years</strong> on low-value activities. Your biggest time sink is <strong>${topWaste?.label}</strong> at <strong>${topWaste?.hours}h/day</strong>. Cutting just 30 minutes from it daily would reclaim <strong>${saved} years</strong>.`;
+    insightEl.innerHTML = `Based on your inputs, you'll spend roughly <strong>${wasteYears} years</strong> on low-value activities in your remaining life. Your biggest time sink is <strong>${topWaste?.label}</strong> at <strong>${topWaste?.hours}h/day</strong>. Cutting just 30 minutes from it daily would reclaim <strong>${saved} years</strong>.`;
   }
 }
 
