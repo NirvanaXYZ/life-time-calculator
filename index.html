@@ -156,8 +156,10 @@ activities.forEach(a => {
 let chart;
 
 function update() {
-  const age = parseInt(document.getElementById('age').value) || 30;
-  const lifespan = parseInt(document.getElementById('lifespan').value) || 80;
+  const ageVal = document.getElementById('age').value;
+  const lifespanVal = document.getElementById('lifespan').value;
+  const age = ageVal === '' ? 0 : parseInt(ageVal);
+  const lifespan = lifespanVal === '' ? age : parseInt(lifespanVal);
   const remaining = Math.max(0, lifespan - age);
   const vals = activities.map(a => ({
     ...a,
@@ -217,8 +219,12 @@ function update() {
 
   const topWaste = vals.filter(a => a.waste).sort((x, y) => y.hours - x.hours)[0];
   const saved = (0.5 / 24 * 365 * remaining / 365).toFixed(1);
-  document.getElementById('insight').innerHTML =
-    `Based on your inputs, you'll spend roughly <strong>${wasteYears} years</strong> on low-value activities. Your biggest time sink is <strong>${topWaste?.label}</strong> at <strong>${topWaste?.hours}h/day</strong>. Cutting just 30 minutes from it daily would reclaim <strong>${saved} years</strong>.`;
+  const insightEl = document.getElementById('insight');
+  if (remaining === 0) {
+    insightEl.innerHTML = `Enter your expected lifespan to see how many years you have left — and how many will go to low-value activities.`;
+  } else {
+    insightEl.innerHTML = `Based on your inputs, you'll spend roughly <strong>${wasteYears} years</strong> on low-value activities. Your biggest time sink is <strong>${topWaste?.label}</strong> at <strong>${topWaste?.hours}h/day</strong>. Cutting just 30 minutes from it daily would reclaim <strong>${saved} years</strong>.`;
+  }
 }
 
 update();
